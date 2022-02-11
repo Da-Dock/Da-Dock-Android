@@ -9,6 +9,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.diary_recycler.*
 import com.example.diary_recycler.dataClass.Login
+import com.example.diary_recycler.dataClass.SignUp
 import com.example.diary_recycler.databinding.ActivityLoginBinding
 import com.example.diary_recycler.view.RetrofitClient
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -26,6 +27,7 @@ import com.kakao.sdk.common.util.Utility
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.security.auth.callback.Callback
+import kotlin.math.log
 
 
 class GoogleLoginActivity : AppCompatActivity() {
@@ -33,7 +35,8 @@ class GoogleLoginActivity : AppCompatActivity() {
     val GOOGLE_REQUEST_CODE = 99
     val TAG = "googleLogin"
     private lateinit var googleSignInClient: GoogleSignInClient
-
+    val retrofit1 = RetrofitClient.getClient()
+    var server = retrofit1?.create(ServerInterface::class.java)
     private val binding: ActivityLoginBinding by lazy {
         ActivityLoginBinding.inflate(
             layoutInflater
@@ -73,6 +76,7 @@ class GoogleLoginActivity : AppCompatActivity() {
         var userToken = input.get("token").toString()
         Log.e("hashmap ", userEmail + " " + userNickname + " " + userToken)
 
+
         var preferences = getSharedPreferences("USERSIGN", Context.MODE_PRIVATE)
         preferences.edit().putString("email", userEmail)
         preferences.getString("email", "")?.let { Log.e("email: Login", it) }
@@ -81,7 +85,7 @@ class GoogleLoginActivity : AppCompatActivity() {
 
 
 
-        server?.loginRequest("", userEmail, userNickname, "")?.enqueue((object: retrofit2.Callback<Login> {
+      /*  server?.loginRequest("", userEmail, userNickname, "")?.enqueue((object: retrofit2.Callback<Login> {
             override fun onFailure(call: retrofit2.Call<Login>, t: Throwable) {
 
             }
@@ -89,8 +93,7 @@ class GoogleLoginActivity : AppCompatActivity() {
                 Log.d("response : ", response?.body().toString())
                 Toast.makeText(this@GoogleLoginActivity, "서버 연결 성공", Toast.LENGTH_SHORT)
             }
-        }))
-
+        }))*/
     }
 
     private fun signIn() {
@@ -128,45 +131,50 @@ class GoogleLoginActivity : AppCompatActivity() {
                     input.put("email", user?.email!!)
                     input.put("nickname", user?.displayName!!)
                     input.put("token", idToken)
+                    server?.loginRequest(idToken, user?.email!!, user?.displayName!!, user.photoUrl.toString())?.enqueue((object: retrofit2.Callback<SignUp> {
+                           override fun onFailure(call: retrofit2.Call<SignUp>, t: Throwable?) {
+                               Log.e(
+                                   "signup",
+                                   "서버연결실패")
+                           }
 
-                    startLoginServer(input)//로그인 서버 실행
+                           override fun onResponse(call: retrofit2.Call<SignUp>, response: retrofit2.Response<SignUp>){
 
-                    loginSuccess() //주석 지울때 지울 코드(중복)
-                  /*  server.postSignUp(input).enqueue((object:retrofit2.Callback<SignUp> {
+                               if (response.isSuccessful()) {
+                                   val signup: SignUp? = response.body()
+                                   val flag = signup?.code
+                                   if (flag == 200) { //보내기 성공
+                                       Log.e(
+                                           "signup",
+                                           "회원가입에 성공했습니다")
+                                       Toast.makeText(
+                                           applicationContext,
+                                           "회원가입에 성공했습니다",
+                                           Toast.LENGTH_SHORT
+                                       ).show()
+                                       loginSuccess()
+                                   } else if (flag == 308) { //이메일 중복
+                                       Log.e(
+                                           "signup",
+                                           "이미 회원가입한 계정입니다", //로그인으로 넘어가기
+                                       )
+                                       Toast.makeText(
+                                           applicationContext,
+                                           "이미 회원가입한 계정입니다",
+                                           Toast.LENGTH_SHORT
+                                       ).show()
+                                       loginSuccess()
+                                   }
+                               } else println(response.toString())
+                           }
 
 
-                        override fun onFailure(call: retrofit2.Call<SignUp>, t: Throwable?) {}
-
-                        override fun onResponse(call: retrofit2.Call<SignUp>, response: retrofit2.Response<SignUp>){
-
-                            if (response.isSuccessful()) {
-                                val signup: SignUp? = response.body()
-                                val flag = signup?.code
-                                if (flag == 200) { //보내기 성공
-                                    Toast.makeText(
-                                        applicationContext,
-                                        "회원가입에 성공했습니다",
-                                        Toast.LENGTH_SHORT
-                                    ).show()
-                                  loginSuccess()
-                                } else if (flag == 308) { //이메일 중복
-                                    Toast.makeText(
-                                        applicationContext, /
-                                        "이미 회원가입한 계정입니다", //로그인으로 넘어가기
-                                        loginSuccess()
-                                        Toast.LENGTH_SHORT
-                                    ).show()
-                                }
-                            } else println(response.toString())
-                        }
-
-
-                    }))  */
+                       }))
 
                 } else {
                     // If sign in fails, display a message to the user.
                     Log.w(TAG, "signInWithCredential:failure", task.exception)
-             }
+                }
             }
     }
 

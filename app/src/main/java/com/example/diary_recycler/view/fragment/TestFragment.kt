@@ -63,14 +63,14 @@ class TestFragment: Fragment() {
         }
 
         binding.button4.setOnClickListener{
-            server?.loginRequest("i", "j", "k", "l")?.enqueue((object:Callback<ResponseDC>{
+        /*    server?.loginRequest("i", "j", "k", "l")?.enqueue(object:Callback<ResponseDC>{
                 override fun onFailure(call: Call<ResponseDC>, t: Throwable) {
 
                 }
                 override fun onResponse(call: Call<ResponseDC>, response: Response<ResponseDC>) {
                     Log.d("response : ", response?.body().toString())
                 }
-            }))
+            }))*/
         }
 
         binding.button5.setOnClickListener {

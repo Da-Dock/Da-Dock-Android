@@ -1,6 +1,7 @@
 package com.example.diary_recycler
 
 import com.example.diary_recycler.dataClass.Login
+import com.example.diary_recycler.dataClass.SignUp
 import retrofit2.Call
 import retrofit2.http.*
 
@@ -23,7 +24,7 @@ interface ServerInterface {
     fun loginRequest(@Field("userToken") userToken:String,
                     @Field("userEmail") userEmail:String,
                     @Field("userName") userName:String,
-                    @Field("profileImg") profileImg:String):Call<Login>
+                    @Field("profileImg") profileImg:String):Call<SignUp>
 
     @FormUrlEncoded
     @POST("/post/post")
@@ -40,4 +41,9 @@ interface ServerInterface {
 
     @DELETE("/{id}")
     fun deleteRequest(@Path("id")id: String): Call<ResponseDC>
+
+
+    @FormUrlEncoded
+    @POST("/join/login")
+    fun postSignUp(@FieldMap param: HashMap<String?, Any?>?): Call<SignUp>
 }
