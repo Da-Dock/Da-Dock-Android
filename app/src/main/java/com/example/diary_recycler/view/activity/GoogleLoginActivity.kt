@@ -69,33 +69,6 @@ class GoogleLoginActivity : AppCompatActivity() {
         }
     }
 
-    private fun startLoginServer(input: HashMap<String?,Any?>) {
-        Log.e("retrofit login", "start")
-        var userEmail = input.get("email").toString()
-        var userNickname = input.get("nickname").toString()
-        var userToken = input.get("token").toString()
-        Log.e("hashmap ", userEmail + " " + userNickname + " " + userToken)
-
-
-        var preferences = getSharedPreferences("USERSIGN", Context.MODE_PRIVATE)
-        preferences.edit().putString("email", userEmail)
-        preferences.getString("email", "")?.let { Log.e("email: Login", it) }
-        val retrofit1 = RetrofitClient.getClient()
-        var server = retrofit1?.create(ServerInterface::class.java)
-
-
-
-      /*  server?.loginRequest("", userEmail, userNickname, "")?.enqueue((object: retrofit2.Callback<Login> {
-            override fun onFailure(call: retrofit2.Call<Login>, t: Throwable) {
-
-            }
-            override fun onResponse(call: retrofit2.Call<Login>, response: retrofit2.Response<Login>) {
-                Log.d("response : ", response?.body().toString())
-                Toast.makeText(this@GoogleLoginActivity, "서버 연결 성공", Toast.LENGTH_SHORT)
-            }
-        }))*/
-    }
-
     private fun signIn() {
         val signInIntent = googleSignInClient.signInIntent
         startActivityForResult(signInIntent, GOOGLE_REQUEST_CODE)
@@ -131,7 +104,9 @@ class GoogleLoginActivity : AppCompatActivity() {
                     input.put("email", user?.email!!)
                     input.put("nickname", user?.displayName!!)
                     input.put("token", idToken)
-                    server?.loginRequest(idToken, user?.email!!, user?.displayName!!, user.photoUrl.toString())?.enqueue((object: retrofit2.Callback<SignUp> {
+                    input.put("img", user.photoUrl.toString())
+                    //idToken, user?.email!!, user?.displayName!!, user.photoUrl.toString()
+                    server?.postSignUp(input)?.enqueue((object: retrofit2.Callback<SignUp> {
                            override fun onFailure(call: retrofit2.Call<SignUp>, t: Throwable?) {
                                Log.e(
                                    "signup",
