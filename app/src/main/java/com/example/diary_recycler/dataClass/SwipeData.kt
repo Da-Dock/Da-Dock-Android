@@ -1,4 +1,4 @@
-package com.example.diary_recycler
+package com.example.diary_recycler.dataClass
 
 data class SwipeData (
     val name : String,

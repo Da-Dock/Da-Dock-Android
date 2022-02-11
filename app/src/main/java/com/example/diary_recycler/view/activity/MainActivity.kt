@@ -5,8 +5,8 @@ import android.os.Bundle
 import android.view.MenuItem
 import androidx.fragment.app.FragmentTransaction
 import com.example.diary_recycler.R
-import com.example.diary_recycler.SwipeAdapter
-import com.example.diary_recycler.SwipeData
+import com.example.diary_recycler.adapter.SwipeAdapter
+import com.example.diary_recycler.dataClass.SwipeData
 import com.example.diary_recycler.databinding.ActivityMainBinding
 import com.example.diary_recycler.view.fragment.ChatFragment
 import com.example.diary_recycler.view.fragment.HomeFragment

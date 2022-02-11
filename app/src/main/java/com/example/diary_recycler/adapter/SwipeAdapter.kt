@@ -1,4 +1,4 @@
-package com.example.diary_recycler
+package com.example.diary_recycler.adapter
 
 import android.content.Context
 import android.content.Intent
@@ -11,13 +11,15 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.bumptech.glide.request.target.Target.SIZE_ORIGINAL
 import com.daimajia.swipe.SwipeLayout
+import com.example.diary_recycler.R
+import com.example.diary_recycler.SqliteHelper
+import com.example.diary_recycler.dataClass.WriteData
 import com.example.diary_recycler.view.activity.DetailActivity
 
 class SwipeAdapter (private val context: Context) : RecyclerView.Adapter<SwipeAdapter.ViewHolder>() {
 
-    var helper:SqliteHelper? = null
+    var helper: SqliteHelper? = null
     var datas = mutableListOf<WriteData>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -60,7 +62,7 @@ class SwipeAdapter (private val context: Context) : RecyclerView.Adapter<SwipeAd
 
         }*/
 
-        fun bind(article:WriteData){
+        fun bind(article: WriteData){
             txtName.text = article.title
             txtAge.text = article.content
             if(article.img==null)

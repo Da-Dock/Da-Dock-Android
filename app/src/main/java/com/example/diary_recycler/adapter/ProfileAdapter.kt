@@ -1,4 +1,4 @@
-package com.example.diary_recycler
+package com.example.diary_recycler.adapter
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
@@ -6,6 +6,8 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.diary_recycler.R
+import com.example.diary_recycler.dataClass.SwipeData
 
 class ProfileAdapter (private val context: Context) : RecyclerView.Adapter<ProfileAdapter.ViewHolder>() {
 

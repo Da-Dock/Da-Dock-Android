@@ -1,7 +1,6 @@
 package com.example.diary_recycler.view.activity
 
 import android.content.Context
-import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.Color
 import android.graphics.PorterDuff
@@ -10,13 +9,10 @@ import android.text.TextUtils
 import android.util.Log
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.diary_recycler.ChatAdapter
-import com.example.diary_recycler.ChatModel
-import com.example.diary_recycler.SwipeAdapter
+import com.example.diary_recycler.adapter.ChatAdapter
+import com.example.diary_recycler.dataClass.ChatModel
 import com.example.diary_recycler.databinding.ActivityChatBinding
-import com.example.diary_recycler.databinding.ActivityWriteBinding
 import io.socket.client.IO
 import io.socket.client.Socket
 import io.socket.emitter.Emitter
@@ -28,7 +24,7 @@ import java.util.*
 
 class ChatActivity : AppCompatActivity(){
     lateinit var chatAdapter: ChatAdapter
-    internal lateinit var preferences: SharedPreferences//사용자 이름을 이걸로 저장할까..?
+    internal lateinit var preferences: SharedPreferences
     private var hasConnection: Boolean = false
     private var thread2: Thread? = null
     private var startTyping = false
@@ -46,6 +42,7 @@ class ChatActivity : AppCompatActivity(){
         setContentView(binding.root)
         setSupportActionBar(binding.toolbar)
         preferences = getSharedPreferences("USERSIGN", Context.MODE_PRIVATE)
+        Log.e("this is ChatActivity", "testing preferences roomName" + preferences.getString("roomName", "")+"이다")
 
         connectAdapter()
 
@@ -128,7 +125,8 @@ class ChatActivity : AppCompatActivity(){
         preferences = getSharedPreferences("USERSIGN", Context.MODE_PRIVATE)
         val now = System.currentTimeMillis()
         val date = Date(now)
-        val sdf = SimpleDateFormat("yyyy-MM-dd")
+        //val sdf = SimpleDateFormat("yyyy-MM-dd")
+        val sdf = SimpleDateFormat("hh:mm")
         val getTime = sdf.format(date)
 
         val message = binding.messageActivityEditText.text.toString().trim({ it <= ' ' })//입력한 메시지 가져오기
@@ -142,7 +140,7 @@ class ChatActivity : AppCompatActivity(){
             jsonObject.put("script", message)
             jsonObject.put("profile_image", "example")
             jsonObject.put("date_time", getTime)
-            jsonObject.put("roomName", "room_example")//룸이름
+            jsonObject.put("roomName", preferences.getString("roomName", ""))//룸이름
         } catch (e: JSONException) {
             e.printStackTrace()
         }
@@ -165,8 +163,8 @@ class ChatActivity : AppCompatActivity(){
         val userId = JSONObject()
         try {
             userId.put("username", preferences.getString("name", "") + " Connected")
-            userId.put("roomName", "room_example")
-            Log.e("username",preferences.getString("name", "") + " Connected")
+            userId.put("roomName", preferences.getString("roomName", ""))
+            Log.e("username",preferences.getString("name", "") + " Connected" + preferences.getString("roomName", ""))
 
             mSocket.emit("connect user", userId)//이거 하면 서버에 반응 떠야함/socket.emit은 메세지 전송임
         } catch (e: JSONException) {

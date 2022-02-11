@@ -6,9 +6,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.example.diary_recycler.APIInterface
 import com.example.diary_recycler.ResponseDC
+import com.example.diary_recycler.ServerInterface
 import com.example.diary_recycler.databinding.FragmentTestBinding
+import com.example.diary_recycler.view.RetrofitClient
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
@@ -35,18 +36,18 @@ class TestFragment: Fragment() {
     }
 
     fun initTest(){
-        val url = "http://13.124.154.227:52970"
-
-        val retrofit = Retrofit.Builder()
+        //val url = "http://ec2-44-201-147-197.compute-1.amazonaws.com:3000/"
+        val retrofit1 = RetrofitClient.getClient()
+        /*val retrofit = Retrofit.Builder()
             .baseUrl(url)
             .addConverterFactory(GsonConverterFactory.create())
-            .build()
-        var server = retrofit.create(APIInterface::class.java)
+            .build()*/
+        var server = retrofit1?.create(ServerInterface::class.java)
 
         binding.button3.setOnClickListener{
             Log.e("testFragment btn3", "start")
 
-            server.getRequest("name").enqueue(object: Callback<ResponseDC> {
+            server?.getRequest("name")?.enqueue(object: Callback<ResponseDC> {
                 override fun onFailure(call: Call<ResponseDC>, t: Throwable) {
                     Log.e("testFragment btn3 fail", "error:(${t.message})")
                 }
@@ -62,7 +63,7 @@ class TestFragment: Fragment() {
         }
 
         binding.button4.setOnClickListener{
-            server.postRequest("id", "password").enqueue((object:Callback<ResponseDC>{
+            server?.loginRequest("i", "j", "k", "l")?.enqueue((object:Callback<ResponseDC>{
                 override fun onFailure(call: Call<ResponseDC>, t: Throwable) {
 
                 }
@@ -73,7 +74,7 @@ class TestFragment: Fragment() {
         }
 
         binding.button5.setOnClickListener {
-            server.putRequest("board", "내용").enqueue((object:Callback<ResponseDC>{
+            server?.putRequest("board", "내용")?.enqueue((object:Callback<ResponseDC>{
                 override fun onFailure(call: Call<ResponseDC>, t: Throwable) {
 
                 }
@@ -84,7 +85,7 @@ class TestFragment: Fragment() {
         }
 
         binding.button6.setOnClickListener{
-            server.deleteRequest("board").enqueue((object:Callback<ResponseDC>{
+            server?.deleteRequest("board")?.enqueue((object:Callback<ResponseDC>{
                 override fun onFailure(call: Call<ResponseDC>, t: Throwable) {
 
                 }

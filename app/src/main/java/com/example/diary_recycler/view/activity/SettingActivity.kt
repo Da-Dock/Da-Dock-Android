@@ -3,12 +3,8 @@ package com.example.diary_recycler.view.activity
 import android.graphics.Color
 import android.graphics.PorterDuff
 import android.os.Bundle
-import android.util.Log
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
-import com.example.diary_recycler.SqliteHelper
-import com.example.diary_recycler.WriteData
-import com.example.diary_recycler.databinding.ActivityDetailBinding
 import com.example.diary_recycler.databinding.ActivitySettingBinding
 
 class SettingActivity : AppCompatActivity(){

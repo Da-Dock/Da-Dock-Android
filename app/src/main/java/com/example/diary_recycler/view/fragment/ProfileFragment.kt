@@ -9,12 +9,10 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import com.bumptech.glide.Glide
-import com.example.diary_recycler.ProfileAdapter
-import com.example.diary_recycler.R
-import com.example.diary_recycler.SwipeData
+import com.example.diary_recycler.adapter.ProfileAdapter
+import com.example.diary_recycler.dataClass.SwipeData
 import com.example.diary_recycler.databinding.FragmentProfileBinding
 import com.example.diary_recycler.view.activity.SettingActivity
-import com.example.diary_recycler.view.activity.WriteActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.kakao.sdk.user.UserApiClient

@@ -7,9 +7,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.diary_recycler.ChatAdapter
-import com.example.diary_recycler.R
-import com.example.diary_recycler.SwipeData
+import com.example.diary_recycler.adapter.ChatAdapter
+import com.example.diary_recycler.dataClass.SwipeData
 import com.example.diary_recycler.databinding.FragmentChatBinding
 
 

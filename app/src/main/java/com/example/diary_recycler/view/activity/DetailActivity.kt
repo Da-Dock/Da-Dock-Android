@@ -1,6 +1,5 @@
 package com.example.diary_recycler.view.activity
 
-import android.app.PendingIntent.getActivity
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
@@ -16,13 +15,13 @@ import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import com.example.diary_recycler.R
 import com.example.diary_recycler.SqliteHelper
-import com.example.diary_recycler.WriteData
+import com.example.diary_recycler.dataClass.WriteData
 import com.example.diary_recycler.databinding.ActivityDetailBinding
 
 
 class DetailActivity : AppCompatActivity(){
     var helper: SqliteHelper? = null
-    var data : WriteData ?= null
+    var data : WriteData?= null
     internal lateinit var preferences: SharedPreferences
 
     private val binding: ActivityDetailBinding by lazy {
@@ -52,6 +51,9 @@ class DetailActivity : AppCompatActivity(){
         binding.tvTitle.setText(data?.title)
         binding.tvContent.setText(data?.content)
         binding.tvDate.setText(data?.datetime.toString())
+
+        var title = binding.tvTitle.text.toString()
+        Log.e("title out: ", title);
         if(data?.img==null)
             Glide.with(this).load(R.drawable.placeholder).into(binding.imageView4)
         else Glide.with(this).load(data?.img).centerCrop().into(binding.imageView4)
@@ -60,6 +62,9 @@ class DetailActivity : AppCompatActivity(){
         binding.button2.setOnClickListener {
             val intent = Intent(this, ChatActivity::class.java)
             editor.putString("name", binding.tvName.text.toString())//이름 가져오기
+            editor.putString("roomName", title)
+
+            Log.e("title in: ", title + preferences.getString("roomName", "") + " end");
             startActivity(intent)
             Log.e("detailActivity name:", binding.tvName.text.toString())
 

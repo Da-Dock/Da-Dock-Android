@@ -1,18 +1,16 @@
 package com.example.diary_recycler.view.activity
 
-import android.R.id
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.telecom.Call
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.example.diary_recycler.APIInterface
-import com.example.diary_recycler.R
-import com.example.diary_recycler.ResponseDC
-import com.example.diary_recycler.SignUp
+import com.example.diary_recycler.*
+import com.example.diary_recycler.dataClass.Login
 import com.example.diary_recycler.databinding.ActivityLoginBinding
-import com.example.diary_recycler.view.HttpClient.Companion.retrofit
+import com.example.diary_recycler.view.RetrofitClient
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -25,6 +23,8 @@ import com.kakao.sdk.auth.LoginClient
 import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.common.model.AuthErrorCause
 import com.kakao.sdk.common.util.Utility
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 import javax.security.auth.callback.Callback
 
 
@@ -33,7 +33,6 @@ class GoogleLoginActivity : AppCompatActivity() {
     val GOOGLE_REQUEST_CODE = 99
     val TAG = "googleLogin"
     private lateinit var googleSignInClient: GoogleSignInClient
-    var server = retrofit.create(APIInterface::class.java)
 
     private val binding: ActivityLoginBinding by lazy {
         ActivityLoginBinding.inflate(
@@ -52,10 +51,12 @@ class GoogleLoginActivity : AppCompatActivity() {
         val keyHash = Utility.getKeyHash(this)
         Log.d("Hash", keyHash)
         googleSignInClient = GoogleSignIn.getClient(this, gso)
+
+        //구글로그인 버튼
         binding.login.setOnClickListener {
             signIn()
         }
-
+        //카카오 로그인 버튼
         binding.kakaologin.setOnClickListener {
             if (LoginClient.instance.isKakaoTalkLoginAvailable(this)) {
                 LoginClient.instance.loginWithKakaoTalk(this, callback = callback)
@@ -63,6 +64,33 @@ class GoogleLoginActivity : AppCompatActivity() {
                 LoginClient.instance.loginWithKakaoAccount(this, callback = callback)
             }
         }
+    }
+
+    private fun startLoginServer(input: HashMap<String?,Any?>) {
+        Log.e("retrofit login", "start")
+        var userEmail = input.get("email").toString()
+        var userNickname = input.get("nickname").toString()
+        var userToken = input.get("token").toString()
+        Log.e("hashmap ", userEmail + " " + userNickname + " " + userToken)
+
+        var preferences = getSharedPreferences("USERSIGN", Context.MODE_PRIVATE)
+        preferences.edit().putString("email", userEmail)
+        preferences.getString("email", "")?.let { Log.e("email: Login", it) }
+        val retrofit1 = RetrofitClient.getClient()
+        var server = retrofit1?.create(ServerInterface::class.java)
+
+
+
+        server?.loginRequest("", userEmail, userNickname, "")?.enqueue((object: retrofit2.Callback<Login> {
+            override fun onFailure(call: retrofit2.Call<Login>, t: Throwable) {
+
+            }
+            override fun onResponse(call: retrofit2.Call<Login>, response: retrofit2.Response<Login>) {
+                Log.d("response : ", response?.body().toString())
+                Toast.makeText(this@GoogleLoginActivity, "서버 연결 성공", Toast.LENGTH_SHORT)
+            }
+        }))
+
     }
 
     private fun signIn() {
@@ -100,6 +128,8 @@ class GoogleLoginActivity : AppCompatActivity() {
                     input.put("email", user?.email!!)
                     input.put("nickname", user?.displayName!!)
                     input.put("token", idToken)
+
+                    startLoginServer(input)//로그인 서버 실행
 
                     loginSuccess() //주석 지울때 지울 코드(중복)
                   /*  server.postSignUp(input).enqueue((object:retrofit2.Callback<SignUp> {

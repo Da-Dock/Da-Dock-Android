@@ -1,6 +1,7 @@
 package com.example.diary_recycler.view.activity
 
 import android.Manifest
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
@@ -10,6 +11,7 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
 import android.view.MenuItem
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import com.amazonaws.auth.CognitoCachingCredentialsProvider
@@ -20,16 +22,17 @@ import com.amazonaws.regions.Regions
 import com.amazonaws.services.s3.AmazonS3
 import com.amazonaws.services.s3.AmazonS3Client
 import com.bumptech.glide.Glide
-import com.example.diary_recycler.RealPathUtil
-import com.example.diary_recycler.SqliteHelper
-import com.example.diary_recycler.SwipeAdapter
+import com.example.diary_recycler.*
+import com.example.diary_recycler.adapter.SwipeAdapter
 import com.example.diary_recycler.databinding.ActivityWriteBinding
+import com.example.diary_recycler.view.RetrofitClient
 import com.example.diary_recycler.view.fragment.HomeFragment
 import java.io.File
+import java.text.SimpleDateFormat
 import java.util.*
 
 
-
+//writeActivity에서 postinsert 함
 class WriteActivity() : AppCompatActivity(){
     var helper:SqliteHelper? = null
     val PERMISSION_Album = 101
@@ -67,7 +70,7 @@ class WriteActivity() : AppCompatActivity(){
 
         //데이터 homeFragment로 전송
         binding.btnSave.setOnClickListener {
-            if(content_et.text.toString().isNotEmpty()){
+            if(content_et.text.toString().isNotEmpty() && title_et.text.toString().isNotEmpty()){
                 Log.e("writeActivity.send", "data sending start")
                 // uploadFile()
 
@@ -75,15 +78,21 @@ class WriteActivity() : AppCompatActivity(){
                 bundle.putString("content", content_et.text.toString())
                 bundle.putString("title", title_et.text.toString())
 
+                lateinit var img: String
+
                 if(f!=null) {
                   bundle.putString(
                       "img",
                       "https://fofuploadtest.s3.ap-northeast-2.amazonaws.com/" + key //aws s3 이미지 uri
                   )
+                    img = "https://fofuploadtest.s3.ap-northeast-2.amazonaws.com/" + key
                     Log.e("이미지 업로드", "확인"+f.toString())
                     uploadImg()
                 }
-                else bundle.putString("img",null) //이미지 없으면 null로 저장
+                else{
+                    bundle.putString("img",null) //이미지 없으면 null로 저장
+                    img = ""
+                }
 
                 val home = HomeFragment()
 
@@ -91,16 +100,24 @@ class WriteActivity() : AppCompatActivity(){
                 home.helper = SqliteHelper(this, "article", null, 1)
                 home.arguments = bundle
 
-                home.setArticle()
+                home.setArticle()//insert 실행
 
                 Log.e("writeActivity.send", "data sending end")
+                postInsert(title_et.text.toString(), content_et.text.toString(), img)
+                }else if(content_et.text.toString().isNotEmpty()){
+                    Toast.makeText(this, "제목을 입력해주세요", Toast.LENGTH_SHORT).show()
+                }else if(title_et.text.toString().isNotEmpty()){
+                    Toast.makeText(this, "내용을 입력해주세요", Toast.LENGTH_SHORT).show()
+                }else{
+                    Toast.makeText(this, "내용, 제목을 입력해주세요", Toast.LENGTH_SHORT).show()
                 }
 
-      finish()
+            finish()
 
-  }
+        }
 
-}
+
+    }
 // actions on click menu items
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
         android.R.id.home -> {
@@ -184,6 +201,37 @@ fun requirePermissions(permissions: Array<String>, requestCode: Int) {
         )
 
 
+    }
+
+    fun postInsert(title:String, content:String, img:String){
+        Log.e("retrofit postInsert", "start")
+        val retrofit1 = RetrofitClient.getClient()
+        var server = retrofit1?.create(ServerInterface::class.java)
+        var preferences = getSharedPreferences("USERSIGN", Context.MODE_PRIVATE)
+        var email = preferences.getString("email", "")
+        //날짜설정
+
+        val now = System.currentTimeMillis()
+        val date = Date(now)
+
+        val sdf = SimpleDateFormat("yyyy.MM.dd hh:mm:ss")
+        val created = sdf.format(date)
+        Log.e("now: ", created)
+        if (email != null) {
+            Log.e("email: ", email)
+        }else{
+            Log.e("email", "empty")
+        }
+
+        server?.postRequest("email", title, content, img, created)?.enqueue((object: retrofit2.Callback<ResponseDC> {
+            override fun onFailure(call: retrofit2.Call<ResponseDC>, t: Throwable) {
+
+            }
+            override fun onResponse(call: retrofit2.Call<ResponseDC>, response: retrofit2.Response<ResponseDC>) {
+                Log.d("response : ", response?.body().toString())
+                //Toast.makeText(this@GoogleLoginActivity, "서버 연결 성공", Toast.LENGTH_SHORT)
+            }
+        }))
     }
 
 

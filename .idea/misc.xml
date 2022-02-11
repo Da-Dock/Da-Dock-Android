@@ -24,9 +24,16 @@
         <entry key="..\:/astudy2022/20220111git/app/src/main/res/layout/item_message.xml" value="0.4" />
         <entry key="..\:/astudy2022/20220111git/app/src/main/res/layout/my_chat.xml" value="0.2" />
         <entry key="..\:/astudy2022/20220111git/app/src/main/res/layout/your_chat.xml" value="0.2796833773087071" />
+        <entry key="..\:/astudy2022/dadock2022/Dang-Geun/app/src/main/res/layout/activity_detail.xml" value="0.264" />
+        <entry key="..\:/astudy2022/dadock2022/Dang-Geun/app/src/main/res/layout/activity_write.xml" value="0.1" />
+        <entry key="..\:/astudy2022/dadock2022/Dang-Geun/app/src/main/res/layout/fragment_home.xml" value="0.1" />
+        <entry key="..\:/astudy2022/dadock2022/Dang-Geun/app/src/main/res/layout/fragment_profile.xml" value="0.1" />
+        <entry key="..\:/astudy2022/dadock2022/Dang-Geun/app/src/main/res/layout/item_profile.xml" value="0.1" />
         <entry key="..\:/astudy2022/git_makingApp/Dang-Geun/app/src/main/res/drawable/mychat.xml" value="0.21574074074074073" />
         <entry key="..\:/astudy2022/git_makingApp/Dang-Geun/app/src/main/res/drawable/youchat.xml" value="0.1" />
+        <entry key="..\:/astudy2022/git_makingApp/Dang-Geun/app/src/main/res/layout/activity_detail.xml" value="0.25364583333333335" />
         <entry key="..\:/astudy2022/git_makingApp/Dang-Geun/app/src/main/res/layout/activity_login.xml" value="0.15208333333333332" />
+        <entry key="..\:/astudy2022/git_makingApp/Dang-Geun/app/src/main/res/layout/activity_write.xml" value="0.1859375" />
         <entry key="..\:/astudy2022/git_makingApp/Dang-Geun/app/src/main/res/layout/your_chat.xml" value="0.1" />
         <entry key="..\:/astudy2022/practice2022/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.11666666666666667" />
         <entry key="..\:/astudy2022/practice2022/app/src/main/res/drawable/ic_launcher_background.xml" value="0.11666666666666667" />
@@ -38,10 +45,9 @@
         <entry key="app/src/main/res/drawable/mychat.xml" value="0.1635" />
         <entry key="app/src/main/res/drawable/nav_item_color.xml" value="0.2025" />
         <entry key="app/src/main/res/drawable/youchat.xml" value="0.1635" />
-        <entry key="app/src/main/res/layout/activity_chat.xml" value="0.335" />
+        <entry key="app/src/main/res/layout/activity_chat.xml" value="0.2826486206054688" />
         <entry key="app/src/main/res/layout/activity_detail.xml" value="0.335" />
         <entry key="app/src/main/res/layout/activity_login.xml" value="0.165" />
-        <entry key="app/src/main/res/layout/activity_login_next.xml" value="0.23958333333333334" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.2838541666666667" />
         <entry key="app/src/main/res/layout/activity_post.xml" value="0.335" />
         <entry key="app/src/main/res/layout/activity_profile.xml" value="0.2838541666666667" />
@@ -57,7 +63,7 @@
         <entry key="app/src/main/res/layout/item_profile.xml" value="0.2838541666666667" />
         <entry key="app/src/main/res/layout/item_swipelist.xml" value="0.2838541666666667" />
         <entry key="app/src/main/res/layout/my_chat.xml" value="0.24737762237762237" />
-        <entry key="app/src/main/res/layout/your_chat.xml" value="0.335" />
+        <entry key="app/src/main/res/layout/your_chat.xml" value="0.45090160067119295" />
         <entry key="app/src/main/res/menu/detail_menu.xml" value="0.25" />
         <entry key="app/src/main/res/menu/menu_bottom.xml" value="0.2838541666666667" />
       </map>
