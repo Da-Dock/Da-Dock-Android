@@ -2,7 +2,9 @@ package com.example.diary_recycler.dataClass
 
 import retrofit2.http.Field
 
-class PostData {
+class PostData( code: String,
+               val msg: String) {
+
 }
 /*@Field("userId") userId:String,
 @Field("title") title:String,

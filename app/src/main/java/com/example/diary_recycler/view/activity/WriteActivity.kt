@@ -211,11 +211,11 @@ fun requirePermissions(permissions: Array<String>, requestCode: Int) {
         var email = preferences.getString("email", "")
         //날짜설정
 
-        val now = System.currentTimeMillis()
-        val date = Date(now)
+        //val now = System.currentTimeMillis()
+        //val date = Date(now)
 
         val sdf = SimpleDateFormat("yyyy.MM.dd hh:mm:ss")
-        val created = sdf.format(date)
+        val created = SdfFormateChange.makeSdfTime(sdf)
         Log.e("now: ", created)
         if (email != null) {
             Log.e("email: ", email)

@@ -10,6 +10,7 @@ import android.util.Log
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.diary_recycler.SdfFormateChange
 import com.example.diary_recycler.adapter.ChatAdapter
 import com.example.diary_recycler.dataClass.ChatModel
 import com.example.diary_recycler.databinding.ActivityChatBinding
@@ -123,11 +124,8 @@ class ChatActivity : AppCompatActivity(){
 
     fun sendMessage() {//어댑터에 메시지 전송
         preferences = getSharedPreferences("USERSIGN", Context.MODE_PRIVATE)
-        val now = System.currentTimeMillis()
-        val date = Date(now)
-        //val sdf = SimpleDateFormat("yyyy-MM-dd")
         val sdf = SimpleDateFormat("hh:mm")
-        val getTime = sdf.format(date)
+        val getTime = SdfFormateChange.makeSdfTime(sdf)
 
         val message = binding.messageActivityEditText.text.toString().trim({ it <= ' ' })//입력한 메시지 가져오기
         if (TextUtils.isEmpty(message)) {
