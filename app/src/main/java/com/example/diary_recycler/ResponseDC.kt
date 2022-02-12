@@ -1,6 +1,8 @@
 package com.example.diary_recycler
 
 import com.example.diary_recycler.dataClass.Login
+import com.example.diary_recycler.dataClass.PostData
+import com.example.diary_recycler.dataClass.PostResponse
 import com.example.diary_recycler.dataClass.SignUp
 import retrofit2.Call
 import retrofit2.http.*
@@ -13,11 +15,7 @@ interface ServerInterface {
     fun getRequest(@Query("name") name: String): Call<ResponseDC>
 
     @GET("/post")
-    fun getPostRequest(@Field("userId") userId:String,
-                       @Field("title") title:String,
-                       @Field("content") content:String,
-                       @Field("contentImg") contentImg:String,
-                       @Field("created") created:String): Call<ResponseDC>
+    fun getPostRequest(@Query("page") page:Int): Call<PostResponse>
 
     @FormUrlEncoded
     @POST("/join/login")
@@ -32,7 +30,7 @@ interface ServerInterface {
                     @Field("title") title:String,
                     @Field("content") content:String,
                     @Field("contentImg") contentImg:String,
-                    @Field("created") created:String):Call<ResponseDC>
+                    @Field("created") created:String):Call<PostResponse>
 
     @FormUrlEncoded
     @PUT("/{id}")

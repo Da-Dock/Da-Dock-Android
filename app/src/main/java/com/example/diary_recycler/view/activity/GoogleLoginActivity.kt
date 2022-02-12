@@ -105,6 +105,7 @@ class GoogleLoginActivity : AppCompatActivity() {
                     input.put("nickname", user?.displayName!!)
                     input.put("token", idToken)
                     input.put("img", user.photoUrl.toString())
+                    Log.e("input", input.get("email").toString())
                     //idToken, user?.email!!, user?.displayName!!, user.photoUrl.toString()
                     server?.postSignUp(input)?.enqueue((object: retrofit2.Callback<SignUp> {
                            override fun onFailure(call: retrofit2.Call<SignUp>, t: Throwable?) {

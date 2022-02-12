@@ -24,6 +24,7 @@ import com.amazonaws.services.s3.AmazonS3Client
 import com.bumptech.glide.Glide
 import com.example.diary_recycler.*
 import com.example.diary_recycler.adapter.SwipeAdapter
+import com.example.diary_recycler.dataClass.PostResponse
 import com.example.diary_recycler.databinding.ActivityWriteBinding
 import com.example.diary_recycler.view.RetrofitClient
 import com.example.diary_recycler.view.fragment.HomeFragment
@@ -209,10 +210,6 @@ fun requirePermissions(permissions: Array<String>, requestCode: Int) {
         var server = retrofit1?.create(ServerInterface::class.java)
         var preferences = getSharedPreferences("USERSIGN", Context.MODE_PRIVATE)
         var email = preferences.getString("email", "")
-        //날짜설정
-
-        //val now = System.currentTimeMillis()
-        //val date = Date(now)
 
         val sdf = SimpleDateFormat("yyyy.MM.dd hh:mm:ss")
         val created = SdfFormateChange.makeSdfTime(sdf)
@@ -223,11 +220,11 @@ fun requirePermissions(permissions: Array<String>, requestCode: Int) {
             Log.e("email", "empty")
         }
 
-        server?.postRequest("email", title, content, img, created)?.enqueue((object: retrofit2.Callback<ResponseDC> {
-            override fun onFailure(call: retrofit2.Call<ResponseDC>, t: Throwable) {
+        server?.postRequest("email", title, content, img, created)?.enqueue((object: retrofit2.Callback<PostResponse> {
+            override fun onFailure(call: retrofit2.Call<PostResponse>, t: Throwable) {
 
             }
-            override fun onResponse(call: retrofit2.Call<ResponseDC>, response: retrofit2.Response<ResponseDC>) {
+            override fun onResponse(call: retrofit2.Call<PostResponse>, response: retrofit2.Response<PostResponse>) {
                 Log.d("response : ", response?.body().toString())
                 //Toast.makeText(this@GoogleLoginActivity, "서버 연결 성공", Toast.LENGTH_SHORT)
             }

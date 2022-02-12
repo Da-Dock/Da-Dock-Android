@@ -6,12 +6,17 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.diary_recycler.*
 import com.example.diary_recycler.adapter.SwipeAdapter
+import com.example.diary_recycler.dataClass.PostData
+import com.example.diary_recycler.dataClass.PostResponse
+import com.example.diary_recycler.dataClass.SignUp
 import com.example.diary_recycler.dataClass.WriteData
 import com.example.diary_recycler.databinding.FragmentHomeBinding
+import com.example.diary_recycler.view.RetrofitClient
 import com.example.diary_recycler.view.activity.WriteActivity
 
 class HomeFragment : Fragment() {
@@ -45,6 +50,7 @@ class HomeFragment : Fragment() {
         swipeadapter = SwipeAdapter(requireContext())
         helper = SqliteHelper(getActivity(), "article", null, 1)
         swipeadapter.datas.addAll(helper.selectArticle())//helper의 select값을 swipeadater의 datas에 넣는다.
+        postSelect()
         swipeadapter.helper = helper//helper 동기화
         binding.rvProfile.adapter = swipeadapter
         binding.rvProfile.apply {
@@ -105,5 +111,38 @@ class HomeFragment : Fragment() {
         initRecycler()
         Log.e("I'm at HomeFragment", "1")
 
+    }
+
+    fun postSelect(){
+        val retrofit1 = RetrofitClient.getClient()
+        var server = retrofit1?.create(ServerInterface::class.java)
+
+        server?.getPostRequest(1)?.enqueue((object: retrofit2.Callback<PostResponse> {
+            override fun onFailure(call: retrofit2.Call<PostResponse>, t: Throwable?) {
+                Log.e(
+                    "post",
+                    "가져오기 실패")
+            }
+
+            override fun onResponse(call: retrofit2.Call<PostResponse>, response: retrofit2.Response<PostResponse>){
+
+                if (response.isSuccessful()) {
+                    val post: PostResponse? = response.body()
+                    val flag = post?.code
+                    if (flag == 200) { //보내기 성공
+                        Log.e(
+                            "post",
+                            "가져오기 성공" + post.data[0].postId)
+                    } else if (flag == 308) { //이메일 중복
+                        Log.e(
+                            "post",
+                            "이미 회원가입한 계정입니다", //로그인으로 넘어가기
+                        )
+                    }
+                } else Log.e("post", response.toString())
+            }
+
+
+        }))
     }
 }
