@@ -35,7 +35,7 @@ import java.util.*
 
 //writeActivity에서 postinsert 함
 class WriteActivity() : AppCompatActivity(){
-    var helper:SqliteHelper? = null
+  //  var helper:SqliteHelper? = null
     val PERMISSION_Album = 101
     var f: File?=null
     val random = Random()
@@ -136,8 +136,13 @@ class WriteActivity() : AppCompatActivity(){
         }else{
             Log.e("email", "empty")
         }
-
-        server?.postRequest("email", title, content, img, created)?.enqueue((object: retrofit2.Callback<PostResponse> {
+        val input = HashMap<String?,Any?>()
+        input.put("userId", email)
+        input.put("title", title)
+        input.put("content", content)
+        input.put("contentImg", img)
+        input.put("created", created)
+        server?.postRequest2("email", title, content, img, created)?.enqueue((object: retrofit2.Callback<PostResponse> {
             override fun onFailure(call: retrofit2.Call<PostResponse>, t: Throwable) {
 
             }
