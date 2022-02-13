@@ -9,7 +9,8 @@ class PostData(
     val content: String,
     val contentImg: String,
     val created: String,
-    val updated: String
+    val updated: String,
+    val code: Int
 ) {}//리스트로 받아와볼까..?
 /*@Field("userId") userId:String,
 @Field("title") title:String,

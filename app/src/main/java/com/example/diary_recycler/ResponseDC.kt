@@ -1,6 +1,5 @@
 package com.example.diary_recycler
 
-import com.example.diary_recycler.dataClass.Login
 import com.example.diary_recycler.dataClass.PostData
 import com.example.diary_recycler.dataClass.PostResponse
 import com.example.diary_recycler.dataClass.SignUp
@@ -26,11 +25,15 @@ interface ServerInterface {
 
     @FormUrlEncoded
     @POST("/post/post")
-    fun postRequest(@Field("userId") userId:String,
+    fun postRequest2(@Field("userId") userId:String,
                     @Field("title") title:String,
                     @Field("content") content:String,
                     @Field("contentImg") contentImg:String,
                     @Field("created") created:String):Call<PostResponse>
+    @FormUrlEncoded
+    @POST("/post/post")
+    fun postRequest(@FieldMap param: HashMap<String?, Any?>?):Call<PostResponse>
+
 
     @FormUrlEncoded
     @PUT("/{id}")
@@ -44,4 +47,9 @@ interface ServerInterface {
     @FormUrlEncoded
     @POST("/join/login")
     fun postSignUp(@FieldMap param: HashMap<String?, Any?>?): Call<SignUp>
+
+    @GET("/post/{postidx}")
+    fun getdetail(
+        @Path("postidx") postidx: String
+    ): Call<PostData>
 }

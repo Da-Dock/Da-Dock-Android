@@ -36,9 +36,10 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
+     //   initRecycler()
 
         binding.swipeLayout.setOnRefreshListener {
-            initRecycler()
+            postSelect()
             binding.swipeLayout.setRefreshing(false)
         }
         binding.floatingActionButton.setOnClickListener{
@@ -46,9 +47,8 @@ class HomeFragment : Fragment() {
                 Log.e("homeFrag.initRecycler", "1")
                 //수정
                 val writeActivity =  WriteActivity()
-                writeActivity.helper = helper
+                //writeActivity.helper = helper
                 val intent = Intent(context, writeActivity::class.java)
-                /////////////////////
                 startActivity(intent)
                 Log.e("homeFrag.initRecycler", "2")
             }
@@ -59,17 +59,16 @@ class HomeFragment : Fragment() {
 
     private fun initRecycler() {//select
         swipeadapter = SwipeAdapter(requireContext())
-        helper = SqliteHelper(getActivity(), "article", null, 1)
-        postSelect()
+    //    helper = SqliteHelper(getActivity(), "article", null, 1)
         swipeadapter.datas.addAll(datas)//helper의 select값을 swipeadater의 datas에 넣는다.
-        swipeadapter.helper = helper//helper 동기화
+       // swipeadapter.helper = helper//helper 동기화
         binding.rvProfile.adapter = swipeadapter
-        binding.rvProfile.apply {
-            layoutManager = LinearLayoutManager(context)
-
-        }//initRecycler()//완료 버튼 누르면 데이터 바인딩
-
-
+        swipeadapter.notifyDataSetChanged()
+        val layoutManager = LinearLayoutManager(context)
+        layoutManager.reverseLayout =true
+        layoutManager.stackFromEnd= true
+        binding.rvProfile.layoutManager = layoutManager
+    //initRecycler()//완료 버튼 누르면 데이터 바인딩
 
     }
     fun setArticle(){//insert//select
@@ -97,7 +96,7 @@ class HomeFragment : Fragment() {
     }
     override fun onResume() {
         super.onResume()
-        initRecycler()
+        postSelect()
         Log.e("I'm at HomeFragment", "1")
 
     }
@@ -123,8 +122,8 @@ class HomeFragment : Fragment() {
                         datas= response.body()!!.data
                         Log.e(
                             "post",
-                            "가져오기 성공" + datas[0].postId)
-
+                            "가져오기 성공" + datas[0].contentImg)
+                        initRecycler()
                     } else if (flag == 308) { //이메일 중복
                         Log.e(
                             "post",

@@ -67,7 +67,10 @@ class SwipeAdapter (private val context: Context) : RecyclerView.Adapter<SwipeAd
         fun bind(article: PostData){
             txtName.text = article.title
             txtAge.text = article.content
-            Glide.with(itemView).load(article.contentImg).centerCrop().into(imgProfile)
+            if(article.contentImg=="")
+                Glide.with(itemView).load(R.drawable.placeholder).into(imgProfile)
+            else Glide.with(itemView).load(article.contentImg).centerCrop().into(imgProfile)
+
             Log.e("SwipeAdater.setArticle", "I'm here!3 " + txtAge.text+article.contentImg)
         }
 
