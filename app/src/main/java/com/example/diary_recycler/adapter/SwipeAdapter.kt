@@ -12,15 +12,17 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.daimajia.swipe.SwipeLayout
+import com.example.diary_recycler.Post
 import com.example.diary_recycler.R
 import com.example.diary_recycler.SqliteHelper
+import com.example.diary_recycler.dataClass.PostData
 import com.example.diary_recycler.dataClass.WriteData
 import com.example.diary_recycler.view.activity.DetailActivity
 
 class SwipeAdapter (private val context: Context) : RecyclerView.Adapter<SwipeAdapter.ViewHolder>() {
 
     var helper: SqliteHelper? = null
-    var datas = mutableListOf<WriteData>()
+    var datas = mutableListOf<PostData>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(context).inflate(R.layout.item_swipelist,parent,false)
@@ -32,7 +34,7 @@ class SwipeAdapter (private val context: Context) : RecyclerView.Adapter<SwipeAd
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         //holder.bind(datas[position])
-        val article : WriteData = datas.get(position)
+        val article : PostData = datas.get(position)
         holder.bind(article)
 
 
@@ -42,12 +44,12 @@ class SwipeAdapter (private val context: Context) : RecyclerView.Adapter<SwipeAd
         val swipelayout :SwipeLayout = holder.itemView.findViewById(R.id.swipe_layout)
         //swipelayout.addSwipeListener(SwipeLayout.SwipeListener)
 
-            holder.itemView.setOnClickListener{
+        holder.itemView.setOnClickListener{
             val intent = Intent(holder.itemView?.context, DetailActivity::class.java)
             intent.putExtra("id",position)
             ContextCompat.startActivity(holder.itemView.context, intent, null)
 
-    }}
+        }}
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         private val swipelayout :SwipeLayout = itemView.findViewById(R.id.swipe_layout)
@@ -62,13 +64,11 @@ class SwipeAdapter (private val context: Context) : RecyclerView.Adapter<SwipeAd
 
         }*/
 
-        fun bind(article: WriteData){
+        fun bind(article: PostData){
             txtName.text = article.title
             txtAge.text = article.content
-            if(article.img==null)
-                Glide.with(itemView).load(R.drawable.placeholder).into(imgProfile)
-            else Glide.with(itemView).load(article.img).centerCrop().into(imgProfile)
-            Log.e("SwipeAdater.setArticle", "I'm here!3 " + txtAge.text+article.img)
+            Glide.with(itemView).load(article.contentImg).centerCrop().into(imgProfile)
+            Log.e("SwipeAdater.setArticle", "I'm here!3 " + txtAge.text+article.contentImg)
         }
 
     }

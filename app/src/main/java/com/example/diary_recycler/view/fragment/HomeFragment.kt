@@ -21,7 +21,7 @@ import com.example.diary_recycler.view.activity.WriteActivity
 
 class HomeFragment : Fragment() {
     lateinit var swipeadapter: SwipeAdapter
-    val datas = mutableListOf<WriteData>()
+    var datas = mutableListOf<PostData>()
     lateinit var helper:SqliteHelper
     //val helper = SqliteHelper(this.context,"article",null,1)
 
@@ -32,33 +32,15 @@ class HomeFragment : Fragment() {
     }
 
     override fun onCreateView(
-            inflater: LayoutInflater, container: ViewGroup?,
-            savedInstanceState: Bundle?
-        ): View? {
-            // Inflate the layout for this fragment
-
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        // Inflate the layout for this fragment
 
         binding.swipeLayout.setOnRefreshListener {
             initRecycler()
             binding.swipeLayout.setRefreshing(false)
         }
-        return binding.root
-        }
-
-
-    private fun initRecycler() {//select
-        swipeadapter = SwipeAdapter(requireContext())
-        helper = SqliteHelper(getActivity(), "article", null, 1)
-        swipeadapter.datas.addAll(helper.selectArticle())//helper의 select값을 swipeadater의 datas에 넣는다.
-        postSelect()
-        swipeadapter.helper = helper//helper 동기화
-        binding.rvProfile.adapter = swipeadapter
-        binding.rvProfile.apply {
-            layoutManager = LinearLayoutManager(context)
-
-        }//initRecycler()//완료 버튼 누르면 데이터 바인딩
-
-        //+버튼 누르면 WriteActivity 시작
         binding.floatingActionButton.setOnClickListener{
             activity?.let{
                 Log.e("homeFrag.initRecycler", "1")
@@ -71,15 +53,22 @@ class HomeFragment : Fragment() {
                 Log.e("homeFrag.initRecycler", "2")
             }
         }
+        return binding.root
+    }
 
-        /*datas.apply {
-            add(WriteData(1, "연정", "호롤롤로", System.currentTimeMillis()))
 
-            swipeadapter.datas = datas//put writedata into swipeadater
-            Log.e("HomeFragment.applyDatas",swipeadapter.itemCount.toString())
-            swipeadapter.notifyDataSetChanged()
+    private fun initRecycler() {//select
+        swipeadapter = SwipeAdapter(requireContext())
+        helper = SqliteHelper(getActivity(), "article", null, 1)
+        postSelect()
+        swipeadapter.datas.addAll(datas)//helper의 select값을 swipeadater의 datas에 넣는다.
+        swipeadapter.helper = helper//helper 동기화
+        binding.rvProfile.adapter = swipeadapter
+        binding.rvProfile.apply {
+            layoutManager = LinearLayoutManager(context)
 
-        }*/
+        }//initRecycler()//완료 버튼 누르면 데이터 바인딩
+
 
 
     }
@@ -97,7 +86,7 @@ class HomeFragment : Fragment() {
             }//새로 입력한 데이터를 helper에 넣는다.
 
             swipeadapter.datas.clear()
-            swipeadapter.datas.addAll(helper.selectArticle())//swipeadapter 비우고 입력한 값 select 해서 추가
+            //swipeadapter.datas.addAll(helper.selectArticle())//swipeadapter 비우고 입력한 값 select 해서 추가
             swipeadapter.notifyDataSetChanged()
             Log.e("HomeFrag.setArticle", "finished")
 
@@ -119,6 +108,7 @@ class HomeFragment : Fragment() {
 
         server?.getPostRequest(1)?.enqueue((object: retrofit2.Callback<PostResponse> {
             override fun onFailure(call: retrofit2.Call<PostResponse>, t: Throwable?) {
+              //  swipeadapter.datas.addAll(helper.selectArticle())
                 Log.e(
                     "post",
                     "가져오기 실패")
@@ -130,9 +120,11 @@ class HomeFragment : Fragment() {
                     val post: PostResponse? = response.body()
                     val flag = post?.code
                     if (flag == 200) { //보내기 성공
+                        datas= response.body()!!.data
                         Log.e(
                             "post",
-                            "가져오기 성공" + post.data[0].postId)
+                            "가져오기 성공" + datas[0].postId)
+
                     } else if (flag == 308) { //이메일 중복
                         Log.e(
                             "post",

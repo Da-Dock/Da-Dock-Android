@@ -98,7 +98,7 @@ class WriteActivity() : AppCompatActivity(){
                 val home = HomeFragment()
 
                 home.swipeadapter = SwipeAdapter(this)
-                home.helper = SqliteHelper(this, "article", null, 1)
+               home.helper = SqliteHelper(this, "article", null, 1)
                 home.arguments = bundle
 
                 home.setArticle()//insert 실행
@@ -119,7 +119,37 @@ class WriteActivity() : AppCompatActivity(){
 
 
     }
-// actions on click menu items
+
+
+    fun postInsert(title:String, content:String, img:String){
+        Log.e("retrofit postInsert", "start")
+        val retrofit1 = RetrofitClient.getClient()
+        var server = retrofit1?.create(ServerInterface::class.java)
+        var preferences = getSharedPreferences("USERSIGN", Context.MODE_PRIVATE)
+        var email = preferences.getString("email", "")
+
+        val sdf = SimpleDateFormat("yyyy.MM.dd hh:mm:ss")
+        val created = SdfFormateChange.makeSdfTime(sdf)
+        Log.e("now: ", created)
+        if (email != null) {
+            Log.e("email: ", email)
+        }else{
+            Log.e("email", "empty")
+        }
+
+        server?.postRequest("email", title, content, img, created)?.enqueue((object: retrofit2.Callback<PostResponse> {
+            override fun onFailure(call: retrofit2.Call<PostResponse>, t: Throwable) {
+
+            }
+            override fun onResponse(call: retrofit2.Call<PostResponse>, response: retrofit2.Response<PostResponse>) {
+                Log.d("response : ", response?.body().toString())
+                //Toast.makeText(this@GoogleLoginActivity, "서버 연결 성공", Toast.LENGTH_SHORT)
+            }
+        }))
+    }
+
+
+    // actions on click menu items
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
         android.R.id.home -> {
         finish()
@@ -133,7 +163,7 @@ class WriteActivity() : AppCompatActivity(){
     }
 
 
-
+// 사진 가져오기---------------------------------------------------------
 fun requirePermissions(permissions: Array<String>, requestCode: Int) {
 
     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
@@ -204,32 +234,6 @@ fun requirePermissions(permissions: Array<String>, requestCode: Int) {
 
     }
 
-    fun postInsert(title:String, content:String, img:String){
-        Log.e("retrofit postInsert", "start")
-        val retrofit1 = RetrofitClient.getClient()
-        var server = retrofit1?.create(ServerInterface::class.java)
-        var preferences = getSharedPreferences("USERSIGN", Context.MODE_PRIVATE)
-        var email = preferences.getString("email", "")
-
-        val sdf = SimpleDateFormat("yyyy.MM.dd hh:mm:ss")
-        val created = SdfFormateChange.makeSdfTime(sdf)
-        Log.e("now: ", created)
-        if (email != null) {
-            Log.e("email: ", email)
-        }else{
-            Log.e("email", "empty")
-        }
-
-        server?.postRequest("email", title, content, img, created)?.enqueue((object: retrofit2.Callback<PostResponse> {
-            override fun onFailure(call: retrofit2.Call<PostResponse>, t: Throwable) {
-
-            }
-            override fun onResponse(call: retrofit2.Call<PostResponse>, response: retrofit2.Response<PostResponse>) {
-                Log.d("response : ", response?.body().toString())
-                //Toast.makeText(this@GoogleLoginActivity, "서버 연결 성공", Toast.LENGTH_SHORT)
-            }
-        }))
-    }
 
 
 
