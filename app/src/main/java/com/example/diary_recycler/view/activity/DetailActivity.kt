@@ -117,7 +117,7 @@ class DetailActivity : AppCompatActivity(){
         val retrofit1 = RetrofitClient.getClient()
         var server = retrofit1?.create(ServerInterface::class.java)
 
-       /*
+
        server?.getdetail(idx.toString())?.enqueue((object: retrofit2.Callback<PostData> {
             override fun onFailure(call: retrofit2.Call<PostData>, t: Throwable?) {
                 //  swipeadapter.datas.addAll(helper.selectArticle())
@@ -135,7 +135,7 @@ class DetailActivity : AppCompatActivity(){
                         data= response.body()
                         Log.e(
                             "post",
-                            "가져오기 성공" + data?.postId)
+                            "가져오기 성공" + data?.contentImg)
 
                     } else if (flag == 308) { //이메일 중복
                         Log.e(
@@ -147,7 +147,7 @@ class DetailActivity : AppCompatActivity(){
             }
 
 
-        }))*/
+        }))/*
 
         server?.getPostRequest(1)?.enqueue((object: retrofit2.Callback<PostResponse> {
             override fun onFailure(call: retrofit2.Call<PostResponse>, t: Throwable?) {
@@ -180,5 +180,5 @@ class DetailActivity : AppCompatActivity(){
 
 
         }))
-    }
+  */  }
 }

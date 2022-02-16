@@ -13,7 +13,7 @@ interface ServerInterface {
     @GET("/main")
     fun getRequest(@Query("name") name: String): Call<ResponseDC>
 
-    @GET("/post")
+    @GET("/post/postList")
     fun getPostRequest(@Query("page") page:Int): Call<PostResponse>
 
     @FormUrlEncoded
@@ -24,7 +24,7 @@ interface ServerInterface {
                     @Field("profileImg") profileImg:String):Call<SignUp>
 
     @FormUrlEncoded
-    @POST("/post/post")
+    @POST("/postList")
     fun postRequest2(@Field("userId") userId:String,
                     @Field("title") title:String,
                     @Field("content") content:String,
@@ -48,7 +48,7 @@ interface ServerInterface {
     @POST("/join/login")
     fun postSignUp(@FieldMap param: HashMap<String?, Any?>?): Call<SignUp>
 
-    @GET("/post/{postidx}")
+    @GET("/post/postDetail/{postidx}")
     fun getdetail(
         @Path("postidx") postidx: String
     ): Call<PostData>

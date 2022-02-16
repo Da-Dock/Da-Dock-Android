@@ -98,7 +98,7 @@ class WriteActivity() : AppCompatActivity(){
                 val home = HomeFragment()
 
                 home.swipeadapter = SwipeAdapter(this)
-               home.helper = SqliteHelper(this, "article", null, 1)
+                home.helper = SqliteHelper(this, "article", null, 1)
                 home.arguments = bundle
 
                 home.setArticle()//insert 실행
