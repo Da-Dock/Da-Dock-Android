@@ -52,10 +52,10 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
                 val fragmentC = ProfileFragment()
                 transaction.replace(R.id.frame_layout,fragmentC, "MY")
             }
-            R.id.menu_test -> {
+         /*   R.id.menu_test -> {
                 val fragmentD = TestFragment()
                 transaction.replace(R.id.frame_layout, fragmentD, "TEST")
-            }
+            }*/
 
         }
         transaction.addToBackStack(null)

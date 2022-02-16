@@ -16,9 +16,6 @@
         android:id="@+id/menu_cal"
         android:icon="@drawable/profile"
         android:title="MY" />
-    <item
-        android:id="@+id/menu_test"
-        android:icon="@drawable/profile"
-        android:title="TEST" />
+
 
 </menu>
