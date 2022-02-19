@@ -118,7 +118,7 @@ class DetailActivity : AppCompatActivity(){
         var server = retrofit1?.create(ServerInterface::class.java)
 
 
-       server?.getdetail(idx.toString())?.enqueue((object: retrofit2.Callback<PostData> {
+       server?.getdetail(idx)?.enqueue((object: retrofit2.Callback<PostData> {
             override fun onFailure(call: retrofit2.Call<PostData>, t: Throwable?) {
                 //  swipeadapter.datas.addAll(helper.selectArticle())
                 Log.e(
@@ -135,7 +135,7 @@ class DetailActivity : AppCompatActivity(){
                         data= response.body()
                         Log.e(
                             "post",
-                            "가져오기 성공" + data?.contentImg)
+                            "가져오기 성공" + data?.title)
 
                     } else if (flag == 308) { //이메일 중복
                         Log.e(

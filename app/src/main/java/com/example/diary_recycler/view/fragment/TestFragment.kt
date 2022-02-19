@@ -84,7 +84,7 @@ class TestFragment: Fragment() {
             }))
         }
 
-        binding.button6.setOnClickListener{
+      /*  binding.button6.setOnClickListener{
             server?.deleteRequest("board")?.enqueue((object:Callback<ResponseDC>{
                 override fun onFailure(call: Call<ResponseDC>, t: Throwable) {
 
@@ -95,6 +95,6 @@ class TestFragment: Fragment() {
             }))
         }
 
-
+*/
     }
 }

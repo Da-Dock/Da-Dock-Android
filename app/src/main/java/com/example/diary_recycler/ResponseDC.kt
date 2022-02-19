@@ -41,7 +41,7 @@ interface ServerInterface {
                    @Field("content")content: String): Call<ResponseDC>
 
     @DELETE("/{id}")
-    fun deleteRequest(@Path("id")id: String): Call<ResponseDC>
+    fun deleteRequest(@Path("id")id: Int): Call<ResponseDC>
 
 
     @FormUrlEncoded
@@ -50,6 +50,6 @@ interface ServerInterface {
 
     @GET("/post/postDetail/{postidx}")
     fun getdetail(
-        @Path("postidx") postidx: String
+        @Path("postidx") postidx: Int
     ): Call<PostData>
 }
