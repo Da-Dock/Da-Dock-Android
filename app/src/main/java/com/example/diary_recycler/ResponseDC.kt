@@ -51,5 +51,5 @@ interface ServerInterface {
     @GET("/post/postDetail/{postidx}")
     fun getdetail(
         @Path("postidx") postidx: Int
-    ): Call<PostData>
+    ): Call<PostResponse>
 }

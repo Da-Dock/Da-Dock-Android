@@ -118,24 +118,25 @@ class DetailActivity : AppCompatActivity(){
         var server = retrofit1?.create(ServerInterface::class.java)
 
 
-       server?.getdetail(idx)?.enqueue((object: retrofit2.Callback<PostData> {
-            override fun onFailure(call: retrofit2.Call<PostData>, t: Throwable?) {
+       server?.getdetail(idx)?.enqueue((object: retrofit2.Callback<PostResponse> {
+            override fun onFailure(call: retrofit2.Call<PostResponse>, t: Throwable?) {
                 //  swipeadapter.datas.addAll(helper.selectArticle())
                 Log.e(
                     "post",
                     "가져오기 실패")
             }
 
-            override fun onResponse(call: retrofit2.Call<PostData>, response: retrofit2.Response<PostData>){
+            override fun onResponse(call: retrofit2.Call<PostResponse>, response: retrofit2.Response<PostResponse>){
 
                 if (response.isSuccessful()) {
-                    val post: PostData? = response.body()
+                    val post: PostResponse? = response.body()
                     val flag = post?.code
                     if (flag == 200) { //보내기 성공
-                        data= response.body()
+                        data= response.body()!!.data[0]
                         Log.e(
                             "post",
                             "가져오기 성공" + data?.title)
+                        detailset()
 
                     } else if (flag == 308) { //이메일 중복
                         Log.e(
