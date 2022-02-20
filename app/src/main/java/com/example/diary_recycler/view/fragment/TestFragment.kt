@@ -44,7 +44,7 @@ class TestFragment: Fragment() {
             .build()*/
         var server = retrofit1?.create(ServerInterface::class.java)
 
-        binding.button3.setOnClickListener{
+        /*binding.button3.setOnClickListener{
             Log.e("testFragment btn3", "start")
 
             server?.getRequest("name")?.enqueue(object: Callback<ResponseDC> {
@@ -95,6 +95,6 @@ class TestFragment: Fragment() {
             }))
         }
 
-
+*/
     }
 }

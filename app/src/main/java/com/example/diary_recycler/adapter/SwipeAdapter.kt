@@ -12,7 +12,6 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.daimajia.swipe.SwipeLayout
-import com.example.diary_recycler.Post
 import com.example.diary_recycler.R
 import com.example.diary_recycler.SqliteHelper
 import com.example.diary_recycler.dataClass.PostData

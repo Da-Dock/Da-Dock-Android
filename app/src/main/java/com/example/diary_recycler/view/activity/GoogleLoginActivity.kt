@@ -3,12 +3,10 @@ package com.example.diary_recycler.view.activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.telecom.Call
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.diary_recycler.*
-import com.example.diary_recycler.dataClass.Login
 import com.example.diary_recycler.dataClass.SignUp
 import com.example.diary_recycler.databinding.ActivityLoginBinding
 import com.example.diary_recycler.view.RetrofitClient
@@ -16,7 +14,6 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
-import com.google.android.gms.common.api.Response
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
@@ -24,10 +21,6 @@ import com.kakao.sdk.auth.LoginClient
 import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.common.model.AuthErrorCause
 import com.kakao.sdk.common.util.Utility
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
-import javax.security.auth.callback.Callback
-import kotlin.math.log
 
 
 class GoogleLoginActivity : AppCompatActivity() {
@@ -107,6 +100,19 @@ class GoogleLoginActivity : AppCompatActivity() {
                     input.put("img", user.photoUrl.toString())
                     Log.e("input", input.get("email").toString())
                     //idToken, user?.email!!, user?.displayName!!, user.photoUrl.toString()
+                    val preferences = this.getPreferences(0)
+                    val editor = preferences.edit()
+                    editor.putString("token", idToken)
+                    editor.apply()
+                    Log.e("tokenLogin", idToken)
+
+                    val keys: Map<String, *> = preferences.getAll()
+                    for ((key, value) in keys) {
+                        Log.d(
+                            "map values1", key + ": " +
+                                    value.toString()
+                        )
+                    }
                     server?.postSignUp(input)?.enqueue((object: retrofit2.Callback<SignUp> {
                            override fun onFailure(call: retrofit2.Call<SignUp>, t: Throwable?) {
                                Log.e(

@@ -16,6 +16,7 @@ import com.bumptech.glide.Glide
 import com.example.diary_recycler.R
 import com.example.diary_recycler.ServerInterface
 import com.example.diary_recycler.SqliteHelper
+import com.example.diary_recycler.dataClass.ChatListResponse
 import com.example.diary_recycler.dataClass.PostData
 import com.example.diary_recycler.dataClass.PostResponse
 import com.example.diary_recycler.dataClass.WriteData
@@ -26,7 +27,6 @@ import com.example.diary_recycler.view.RetrofitClient
 class DetailActivity : AppCompatActivity(){
     var helper: SqliteHelper? = null
     var data : PostData?= null
-    internal lateinit var preferences: SharedPreferences
 
     private val binding: ActivityDetailBinding by lazy {
         ActivityDetailBinding.inflate(
@@ -48,6 +48,16 @@ class DetailActivity : AppCompatActivity(){
         helper = SqliteHelper(this, "article", null, 1)
         initDetail(idx)
 //        data= helper?.selectArticle()?.get(idx)
+
+        //채팅하기 버튼 누르면!
+        binding.button2.setOnClickListener {
+            val intent = Intent(this, ChatActivity::class.java)
+            startActivity(intent)
+            Log.e("detailActivity name:", binding.tvName.text.toString())
+
+            insertChatRoomList((idx+1).toString())//먼저 채팅목록에 있는지 확인 하고 없으면 insert(token이랑 groupId 보내서 userId로 채팅방 확인-> 있으면 그냥 반환, 없으면 insert하고 반환
+
+        }
 
     }
 
@@ -89,8 +99,6 @@ class DetailActivity : AppCompatActivity(){
     }
 
     fun detailset(){
-        preferences = getSharedPreferences("USERSIGN", Context.MODE_PRIVATE)
-        val editor = preferences!!.edit()
         binding.tvTitle.setText(data?.title)
         binding.tvContent.setText(data?.content)
         binding.tvDate.setText(data?.created.toString())
@@ -100,42 +108,31 @@ class DetailActivity : AppCompatActivity(){
         if(data?.contentImg=="")
             Glide.with(this).load(R.drawable.placeholder).into(binding.imageView4)
         else Glide.with(this).load(data?.contentImg).centerCrop().into(binding.imageView4)
-
-        //채팅하기 버튼 누르면!
-        binding.button2.setOnClickListener {
-            val intent = Intent(this, ChatActivity::class.java)
-            editor.putString("name", binding.tvName.text.toString())//이름 가져오기
-            editor.putString("roomName", title)
-
-            Log.e("title in: ", title + preferences.getString("roomName", "") + " end");
-            startActivity(intent)
-            Log.e("detailActivity name:", binding.tvName.text.toString())
-
-        }
     }
     fun initDetail(idx:Int){
         val retrofit1 = RetrofitClient.getClient()
         var server = retrofit1?.create(ServerInterface::class.java)
 
 
-       server?.getdetail(idx.toString())?.enqueue((object: retrofit2.Callback<PostData> {
-            override fun onFailure(call: retrofit2.Call<PostData>, t: Throwable?) {
+       server?.getdetail(idx.toString())?.enqueue((object: retrofit2.Callback<PostResponse> {
+            override fun onFailure(call: retrofit2.Call<PostResponse>, t: Throwable?) {
                 //  swipeadapter.datas.addAll(helper.selectArticle())
                 Log.e(
                     "post",
                     "가져오기 실패")
             }
 
-            override fun onResponse(call: retrofit2.Call<PostData>, response: retrofit2.Response<PostData>){
+            override fun onResponse(call: retrofit2.Call<PostResponse>, response: retrofit2.Response<PostResponse>){
 
                 if (response.isSuccessful()) {
-                    val post: PostData? = response.body()
+                    val post: PostResponse? = response.body()
                     val flag = post?.code
                     if (flag == 200) { //보내기 성공
-                        data= response.body()
+                        data= post.data[0]
+                        Log.e("post1", post.data[0].toString())
                         Log.e(
-                            "post",
-                            "가져오기 성공" + data?.contentImg)
+                            "post?",
+                            "가져오기 성공?" + data?.postId + data?.title)
 
                     } else if (flag == 308) { //이메일 중복
                         Log.e(
@@ -181,4 +178,35 @@ class DetailActivity : AppCompatActivity(){
 
         }))
   */  }
+
+    fun insertChatRoomList(groupId: String){//select 하고 있으면? 중복 반환
+        val retrofit1 = RetrofitClient.getClient()
+        var server = retrofit1?.create(ServerInterface::class.java)
+        Log.e("groupId: ", groupId)
+
+        /*val preferences = requireActivity().getPreferences(0)
+        preferences.getString("token", "")?.let { Log.e("token Chat: ", it) }
+        val keys: Map<String, *> = preferences.getAll()
+        for ((key, value) in keys) {
+            Log.d(
+                "map values2", key + ": " +
+                        value.toString()
+            )
+        }*/
+
+        server?.insertChatRoomList("토큰", groupId)?.enqueue((object: retrofit2.Callback<ChatListResponse> {
+            override fun onFailure(call: retrofit2.Call<ChatListResponse>, t: Throwable?) {
+                Log.e("ChatList", "가져오기 실패")
+            }
+            override fun onResponse(call: retrofit2.Call<ChatListResponse>, response: retrofit2.Response<ChatListResponse>){
+                if (response.isSuccessful()) {
+                    val post: ChatListResponse? = response.body()
+                    val flag = post?.code
+                    if (flag == 200) {
+                        Log.e("ChatList", "가져오기 성공")
+                    } else Log.e("ChatList", "알수 없는 에러",)
+                } else Log.e("post", response.toString())
+            }
+        }))
+    }
 }

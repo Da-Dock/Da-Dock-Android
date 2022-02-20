@@ -11,9 +11,12 @@ import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.diary_recycler.SdfFormateChange
+import com.example.diary_recycler.ServerInterface
 import com.example.diary_recycler.adapter.ChatAdapter
+import com.example.diary_recycler.dataClass.ChatListResponse
 import com.example.diary_recycler.dataClass.ChatModel
 import com.example.diary_recycler.databinding.ActivityChatBinding
+import com.example.diary_recycler.view.RetrofitClient
 import io.socket.client.IO
 import io.socket.client.Socket
 import io.socket.emitter.Emitter
@@ -178,7 +181,6 @@ class ChatActivity : AppCompatActivity(){
             layoutManager = LinearLayoutManager(context)
         }
         binding.messageActivityRecyclerview.setHasFixedSize(true)
-
     }
 
 }
