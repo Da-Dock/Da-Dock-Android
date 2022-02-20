@@ -11,7 +11,6 @@ import com.example.diary_recycler.databinding.ActivityMainBinding
 import com.example.diary_recycler.view.fragment.ChatFragment
 import com.example.diary_recycler.view.fragment.HomeFragment
 import com.example.diary_recycler.view.fragment.ProfileFragment
-import com.example.diary_recycler.view.fragment.TestFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemSelectedListener  {

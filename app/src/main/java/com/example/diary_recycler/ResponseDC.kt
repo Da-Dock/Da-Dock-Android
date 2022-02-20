@@ -23,11 +23,6 @@ interface ServerInterface {
     @POST("/join/login")
     fun postSignUp(@FieldMap param: HashMap<String?, Any?>?): Call<SignUp>
 
-    @GET("/post/postDetail/{postidx}")//디테일
-    fun getdetail(
-        @Path("postidx") postidx: String
-    ): Call<PostResponse>
-
     @FormUrlEncoded
     @POST("/chat/chatRoomList_select")//토큰 보내서 채팅리스트 가져오기
     fun getChatRoomList(@Field("token") token:String): Call<ChatListResponse>
@@ -48,7 +43,7 @@ interface ServerInterface {
                    @Field("content")content: String): Call<ResponseDC>
 
     @DELETE("/{id}")
-    fun deleteRequest(@Path("id")id: String): Call<ResponseDC>
+    fun deleteRequest(@Path("id")id: Int): Call<ResponseDC>
 
     /*@FormUrlEncoded
  @POST("/post/post")
@@ -63,4 +58,8 @@ interface ServerInterface {
 
  @GET("/main")
  fun getRequest(@Query("name") name: String): Call<ResponseDC>*/
+    @GET("/post/postDetail/{postidx}")
+    fun getdetail(
+        @Path("postidx") postidx: Int
+    ): Call<PostResponse>
 }
