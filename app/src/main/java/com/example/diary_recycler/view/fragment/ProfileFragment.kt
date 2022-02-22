@@ -64,8 +64,8 @@ class ProfileFragment : Fragment() {
 
     private fun initRecycler() {
         swipeadapter = ProfileAdapter(requireContext())
-        binding.recyclerView.adapter = swipeadapter
-        binding.recyclerView.apply {
+        binding.recyclerView2.adapter = swipeadapter
+        binding.recyclerView2.apply {
             layoutManager = GridLayoutManager(context,3)
 
         }
